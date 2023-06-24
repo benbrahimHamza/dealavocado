@@ -1,0 +1,3 @@
+[submodule "menulizer-back"]
+	path = menulizer-back
+	url = https://github.com/benbrahimHamza/menulizer-back
