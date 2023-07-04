@@ -7,3 +7,28 @@ services:
       MYSQL_DATABASE: main
     ports:
       - '3306'
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+    depends_on:
+      - database
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_SECRET=${APP_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+    volumes:
+      - ./menulizer-back/src/:/var/www
+  nginx:
+    build:
+      context: ./docker/nginx
+    volumes:
+      - ./menulizer-back/src/:/var/www
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/sites/:/etc/nginx/sites-available
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d
+      - ./docker/nginx/logs:/var/log
+    depends_on:
+      - php-fpm
+    ports:
+      - "80:80"
+      - "443:443"
